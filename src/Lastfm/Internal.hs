@@ -1,7 +1,4 @@
 {-# LANGUAGE CPP #-}
-#if __GLASGOW_HASKELL__ >= 708
-{-# LANGUAGE AutoDeriveTypeable #-}
-#endif
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE KindSignatures #-}
