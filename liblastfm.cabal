@@ -1,27 +1,28 @@
-name:          liblastfm
-version:       0.7.0
-synopsis:      Lastfm API interface
-license:       MIT
-license-file:  LICENSE
-author:        Matvey Aksenov, Dmitry Malikov
-maintainer:    Matvey Aksenov <matvey.aksenov@gmail.com>
-category:      Network APIs
+cabal-version:      >=1.10
+name:               liblastfm
+version:            0.7.0
+license:            MIT
+license-file:       LICENSE
+maintainer:         Matvey Aksenov <matvey.aksenov@gmail.com>
+author:             Matvey Aksenov, Dmitry Malikov
+synopsis:           Lastfm API interface
 description:
   Provides interface to Lastfm REST API, supports XML and JSON formats.
-cabal-version: >= 1.10
-build-type:    Simple
+
+category:           Network APIs
+build-type:         Simple
 extra-source-files:
-  README.markdown
   CHANGELOG.markdown
-  example/README.markdown
   example/desktop-authentication.hs
   example/liblastfm-examples.cabal
   example/mobile-authentication.hs
   example/multitag-search.hs
   example/playcount.hs
+  example/README.markdown
   example/recommendations.hs
   example/sort-friends.hs
   example/web-authentication.hs
+  README.markdown
 
 source-repository head
   type:     git
@@ -32,32 +33,12 @@ source-repository this
   location: https://github.com/supki/liblastfm
   tag:      0.7.0
 
-
 flag test-api
   description: a real API test
-  default: False
-  manual: True
+  default:     False
+  manual:      True
 
 library
-  default-language:
-    Haskell2010
-  build-depends:
-      aeson
-    , base            >= 4 && < 5
-    , bytestring
-    , cereal
-    , containers      >= 0.5
-    , cryptonite      >= 0.7
-    , http-client     >= 0.5
-    , http-client-tls >= 0.2
-    , network-uri
-    , profunctors
-    , semigroups
-    , transformers
-    , text
-    , xml-conduit     >= 1.1
-  hs-source-dirs:
-   src
   exposed-modules:
     Lastfm
     Lastfm.Album
@@ -78,36 +59,31 @@ library
     Lastfm.Track
     Lastfm.User
     Lastfm.Venue
-  ghc-options:
-    -Wall
-    -funbox-strict-fields
+
+  hs-source-dirs:   src
+  default-language: Haskell2010
+  ghc-options:      -Wall -funbox-strict-fields
+  build-depends:
+      aeson            >=2.2.0
+    , base             >=4.19.0.0
+    , bytestring       >=0.12.0.0
+    , cereal           <0.6.0
+    , containers       >=0.6      && <0.8.0
+    , cryptonite       >=0.30     && <0.32.0
+    , http-client      >=0.5      && <0.8.0
+    , http-client-tls  >=0.2      && <0.4.0
+    , network-uri      <2.7.0
+    , profunctors      <5.7.0
+    , semigroups       <0.21.0
+    , text             <2.2
+    , transformers     <0.7.0
+    , xml-conduit      >=1.8      && <1.10.0
 
 test-suite api
-  if !flag(test-api)
-    buildable: False
-  default-language:
-    Haskell2010
-  type:
-    exitcode-stdio-1.0
-  build-depends:
-      aeson
-    , base                  >= 4 && < 5
-    , bytestring
-    , HUnit
-    , http-client
-    , http-client-tls
-    , lens-aeson            >= 1.0.0.1
-    , lens                  >= 4.4
-    , liblastfm
-    , hspec
-    , text
-    , xml-html-conduit-lens >= 0.3
-  hs-source-dirs:
-    test/api
-  main-is:
-    Spec.hs
+  type:             exitcode-stdio-1.0
+  main-is:          Spec.hs
+  hs-source-dirs:   test/api
   other-modules:
-    SpecHelper
     Json.AlbumSpec
     Json.ArtistSpec
     Json.ChartSpec
@@ -121,6 +97,7 @@ test-suite api
     Json.TrackSpec
     Json.UserSpec
     Json.VenueSpec
+    SpecHelper
     Xml.AlbumSpec
     Xml.ArtistSpec
     Xml.ChartSpec
@@ -134,42 +111,50 @@ test-suite api
     Xml.TrackSpec
     Xml.UserSpec
     Xml.VenueSpec
-  ghc-options:
-    -Wall
-    -fno-warn-orphans
 
-test-suite spec
-  default-language:
-    Haskell2010
-  type:
-    exitcode-stdio-1.0
+  default-language: Haskell2010
+  ghc-options:      -Wall -fno-warn-orphans
   build-depends:
       aeson
-    , base                    >= 4 && < 5
+    , base                   >=4       && <5
+    , bytestring
+    , hspec
+    , http-client
+    , http-client-tls
+    , HUnit
+    , lens                   >=4.4
+    , lens-aeson             >=1.0.0.1
+    , liblastfm
+    , text
+    , xml-html-conduit-lens  >=0.3
+
+  if !flag(test-api)
+    buildable: False
+
+test-suite spec
+  type:             exitcode-stdio-1.0
+  main-is:          Spec.hs
+  cpp-options:      -DTEST
+  hs-source-dirs:   src test/spec
+  other-modules:    Lastfm.ResponseSpec
+  default-language: Haskell2010
+  ghc-options:      -Wall
+  build-depends:
+      aeson
+    , base                     >=4       && <5
     , bytestring
     , cereal
     , containers
     , cryptonite
     , hspec
-    , hspec-expectations-lens >= 0.3.0.0
+    , hspec-expectations-lens  >=0.3.0.0
     , http-client
     , http-client-tls
-    , lens                    >= 4.4
-    , lens-aeson              >= 1.0.0.1
+    , lens                     >=4.4
+    , lens-aeson               >=1.0.0.1
     , network-uri
     , profunctors
     , text
     , transformers
     , xml-conduit
-    , xml-html-conduit-lens   >= 0.3
-  hs-source-dirs:
-    src
-    test/spec
-  main-is:
-    Spec.hs
-  other-modules:
-    Lastfm.ResponseSpec
-  ghc-options:
-    -Wall
-  cpp-options:
-    -DTEST
+    , xml-html-conduit-lens    >=0.3
